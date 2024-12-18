@@ -7,13 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "tb_endereco")
-public class Endereco implements EntidadeBase<Long> {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Embeddable
+public class Endereco {
 
     private String logradouro;
     private String numero;
