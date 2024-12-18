@@ -14,6 +14,7 @@ public record PessoaAtualizarDto(
                         String nome,
                         @Email
                         String email,
+                        @CPF
                         String cpf,
                         @Valid @Past
                         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")

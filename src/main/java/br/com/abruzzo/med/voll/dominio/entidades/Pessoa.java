@@ -27,7 +27,11 @@ public class Pessoa implements EntidadeBase<Long>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+
+    @Email
     private String email;
+
+    @CPF
     @Column(unique = true, nullable = false)
     private String cpf;
     @Embedded
