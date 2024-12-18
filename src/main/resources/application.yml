@@ -48,9 +48,13 @@ spring:
     rest:
       default-media-type: application/json
     web:
+      sort:
+        sort-parameter: ordenarPor
       pageable:
         default-page-size: 10
         max-page-size: 100
+        page-parameter: pagina
+        size-parameter: tamanho
   jackson:
     default-property-inclusion: NON_NULL
 
