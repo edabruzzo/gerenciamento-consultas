@@ -9,6 +9,7 @@ import br.com.abruzzo.med.voll.core.service.CrudBaseService;
 import br.com.abruzzo.med.voll.dominio.entidades.Medico;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -16,13 +17,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/medicos")
 public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
     private final MedicoService medicoService;
+
     private final MedicoMapper medicoMapper;
 
     @Override

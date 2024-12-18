@@ -1,35 +1,51 @@
+version: '3.8'
+
 services:
   med_voll_db_postgres:
-    build: ./postgres/.
     restart: always
+    image: postgres:13-alpine
     container_name: med_voll_db_postgres
     logging:
       options:
         max-size: 10m
         max-file: "3"
-    ports:
-      - 5440:5432
-      #network_mode: "host"
-    #user: "${UID}:${GID}"
+    environment:
+      - POSTGRES_USER=${PSQL_SERVICO_USER:?error}
+      - POSTGRES_PASSWORD=${PSQL_SERVICO_PASS:?error}
+      - POSTGRES_DB=${PSQL_DATABASE:?error}
     volumes:
-      - "/etc/timezone:/etc/timezone:ro"
-      - "/etc/localtime:/etc/localtime:ro"
       - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
-      #entrypoint: [ "bash", "-c", "chmod 750 -R /var/lib/postgresql/data/medvolltsd000 && chmod 750 -R /var/lib/postgresql/data/medvolltsd000"]
+    ports:
+      - "5440:5432"
+    networks:
+      - med-voll-network
+
   med-voll-backend:
-    image: med-voll-backend:0.0.1
-    build:
-      context: ./docker/.
-    container_name: sessao-ft-backend
+    build: ./docker
+    image: amazoncorretto:17.0.7-alpine
+    container_name: med-voll-backend
     environment:
       - PORTA_API=9091
-      - PSQL_SERVER=localhost
-      - PSQL_SERVER_PORT=5440
-      - PSQL_DATABASE=med_voll_db
+      - PSQL_SERVER=med_voll_db_postgres
+      - PSQL_SERVER_PORT=5432
+      - PSQL_DATABASE=${PSQL_DATABASE:?error}
       - PSQL_SERVICO_USERNAME=${PSQL_SERVICO_USER:?error}
       - PSQL_SERVICO_PASSWORD=${PSQL_SERVICO_PASS:?error}
     ports:
       - "9091:8080"
     depends_on:
       - med_voll_db_postgres
+    entrypoint: ["sh", "/usr/local/bin/wait-for-it", "med_voll_db_postgres:5432", "--", "java", "-jar", "/opt/java/app.jar"]
+    networks:
+      - med-voll-network
+    volumes:
+      - ./target/med.voll.jar:/opt/java/app.jar
+
+networks:
+  med-voll-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+
 

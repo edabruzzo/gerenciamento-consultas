@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface CrudBaseService<E extends EntidadeBase<ID>, ID> extends ServiceBase {
+public interface CrudBaseService<E extends EntidadeBase<ID>, ID>{
     int DEFAULT_PAGE_SIZE = 10;
 
     JpaRepository<E, ID> getRepository();

@@ -1,8 +1,8 @@
 info:
   app:
-    name: med.voll
-    version: 0.0.1-SNAPSHOT
-    #build-date: ^build.datahora^
+    name: ^project.name^
+    version: ^project.version^
+    build-date: ^build.datahora^
 
 server:
   port: ${PORTA_API}
@@ -34,6 +34,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: create
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
+    user: ${PSQL_SERVICO_USERNAME:?error}
+    password: ${PSQL_SERVICO_PASSWORD:?error}
   data:
     rest:
       default-media-type: application/json

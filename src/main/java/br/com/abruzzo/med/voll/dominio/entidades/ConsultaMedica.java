@@ -2,9 +2,7 @@ package br.com.abruzzo.med.voll.dominio.entidades;
 
 import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +10,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "idConsultaMedica")
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Table(name = "tb_consulta_medica")
 public class ConsultaMedica implements EntidadeBase<Long> {
 
