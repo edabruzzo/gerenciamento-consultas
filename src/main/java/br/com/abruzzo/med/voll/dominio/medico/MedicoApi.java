@@ -46,7 +46,6 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
         return listarPaginado(pageable,this.medicoMapper.toEntity(filtro));
     }
 
-
     @PostMapping("/cadastrar")
     public ResponseEntity<Resposta<MedicoDto>> cadastrar(@RequestBody @Valid MedicoDto dadosMedico,
                                                          UriComponentsBuilder uriBuilder){
@@ -65,6 +64,11 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
     @DeleteMapping("{id}")
     public ResponseEntity<Resposta> remover(@PathVariable Long id){
         return this.excluir(id);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Resposta<MedicoDto>> obterMedico(@PathVariable Long id){
+        return this.buscar(id);
     }
 
 }

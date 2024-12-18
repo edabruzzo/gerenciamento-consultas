@@ -13,7 +13,6 @@ server:
     whitelabel:
       enabled: false
 
-# Vari�veis de Ambiente
 #med-voll:
   #app-seguranca-service: ${SEGURANCA_URL}
 
@@ -83,3 +82,6 @@ logging:
     org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE:DEBUG}
     # Mais info: TRACE
     org.hibernate.type.descriptor.sql: ${LOG_LEVEL_HIBERNATE_DESCRIPTOR:TRACE}
+
+
+
