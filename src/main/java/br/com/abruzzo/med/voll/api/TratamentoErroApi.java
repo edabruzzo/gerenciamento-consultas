@@ -14,6 +14,6 @@ public class TratamentoErroApi implements BaseApi {
 
     @ExceptionHandler({EntityNotFoundException.class, RecursoNaoEncontradoException.class})
     public ResponseEntity tratarErro404(){
-        return enviarResposta(new Resposta(MensagemErroEnum.ENTIDADE_NAO_ENCONTRADA), HttpStatus.BAD_REQUEST);
+        return enviarResposta(new Resposta(MensagemErroEnum.ENTIDADE_NAO_ENCONTRADA), HttpStatus.NOT_FOUND);
     }
 }
