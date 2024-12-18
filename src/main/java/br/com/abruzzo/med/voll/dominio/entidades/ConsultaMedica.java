@@ -1,4 +1,4 @@
-package br.com.abruzzo.med.voll.dominio.consultamedica;
+package br.com.abruzzo.med.voll.dominio.entidades;
 
 import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 import jakarta.persistence.*;

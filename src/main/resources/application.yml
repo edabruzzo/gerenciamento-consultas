@@ -1,0 +1,72 @@
+info:
+  app:
+    name: med.voll
+    version: 0.0.1-SNAPSHOT
+    #build-date: ^build.datahora^
+
+server:
+  port: ${PORTA_API}
+  servlet:
+    context-path: /med-voll-api # Contexto padr�o
+  error:
+    include-stacktrace: never
+    whitelabel:
+      enabled: false
+
+# Vari�veis de Ambiente
+#med-voll:
+  #app-seguranca-service: ${SEGURANCA_URL}
+
+spring:
+  application:
+    name: med-voll-service
+  config:
+    import: "optional:file:./dev.properties"
+  datasource:
+    url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
+    username: ${PSQL_SERVICO_USERNAME:?error}
+    password: ${PSQL_SERVICO_PASSWORD:?error}
+    driver-class-name: org.postgresql.Driver
+    validationQuery: select 1
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: create
+  data:
+    rest:
+      default-media-type: application/json
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 100
+  jackson:
+    default-property-inclusion: NON_NULL
+
+# Swagger
+springdoc:
+  swagger-ui:
+    path: /docs/swagger-ui.html
+    display-request-duration: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    path: /docs
+
+# M�tricas e monitoramento
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+
+# Configura��o de logging
+logging:
+  level:
+    # Mais log: DEBUG
+    com.zaxxer.hikari: ${LOG_LEVEL_HIKARI:INFO}
+    # Mais log: DEBUG
+    org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE:INFO}
+    # Mais info: TRACE
+    org.hibernate.type.descriptor.sql: ${LOG_LEVEL_HIBERNATE_DESCRIPTOR:INFO}

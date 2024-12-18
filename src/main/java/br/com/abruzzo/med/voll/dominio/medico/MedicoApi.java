@@ -6,6 +6,7 @@ import br.com.abruzzo.med.voll.core.model.dto.DtoBase;
 import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 import br.com.abruzzo.med.voll.core.model.mappers.BaseMapper;
 import br.com.abruzzo.med.voll.core.service.CrudBaseService;
+import br.com.abruzzo.med.voll.dominio.entidades.Medico;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -17,16 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/medicos")
 public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
     private final MedicoService medicoService;
     private final MedicoMapper medicoMapper;
-
-    public MedicoApi(MedicoService medicoService, MedicoMapper medicoMapper) {
-        this.medicoService = medicoService;
-        this.medicoMapper = medicoMapper;
-    }
 
     @Override
     public CrudBaseService<EntidadeBase<Long>, Long> getService() {

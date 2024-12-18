@@ -1,0 +1,35 @@
+services:
+  med_voll_db_postgres:
+    build: ./postgres/.
+    restart: always
+    container_name: med_voll_db_postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - 5440:5432
+      #network_mode: "host"
+    #user: "${UID}:${GID}"
+    volumes:
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+      #entrypoint: [ "bash", "-c", "chmod 750 -R /var/lib/postgresql/data/medvolltsd000 && chmod 750 -R /var/lib/postgresql/data/medvolltsd000"]
+  med-voll-backend:
+    image: med-voll-backend:0.0.1
+    build:
+      context: ./docker/.
+    container_name: sessao-ft-backend
+    environment:
+      - PORTA_API=9091
+      - PSQL_SERVER=localhost
+      - PSQL_SERVER_PORT=5440
+      - PSQL_DATABASE=med_voll_db
+      - PSQL_SERVICO_USERNAME=${PSQL_SERVICO_USER:?error}
+      - PSQL_SERVICO_PASSWORD=${PSQL_SERVICO_PASS:?error}
+    ports:
+      - "9091:8080"
+    depends_on:
+      - med_voll_db_postgres
+
