@@ -3,7 +3,6 @@ package br.com.abruzzo.med.voll.dominio.entidades;
 import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 import br.com.abruzzo.med.voll.dominio.enums.EspecialidadeEnum;
 import br.com.abruzzo.med.voll.dominio.enums.SituacaoMedicoEnum;
-import br.com.abruzzo.med.voll.dominio.medico.MedicoAtualizarDto;
 import jakarta.persistence.*;
 import lombok.*;
 

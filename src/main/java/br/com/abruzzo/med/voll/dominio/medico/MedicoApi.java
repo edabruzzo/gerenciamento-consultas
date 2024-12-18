@@ -16,12 +16,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/medicos")
+@RequestMapping(MedicoApi.API)
 public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
+    public static final String API = "/medicos";
     private final MedicoService medicoService;
     private final MedicoMapper medicoMapper;
 
@@ -46,8 +48,9 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Resposta<MedicoDto>> cadastrar(@RequestBody @Valid MedicoDto dadosMedico){
-        return this.inserir(this.medicoMapper.toEntity(dadosMedico));
+    public ResponseEntity<Resposta<MedicoDto>> cadastrar(@RequestBody @Valid MedicoDto dadosMedico,
+                                                         UriComponentsBuilder uriBuilder){
+        return this.inserir(this.medicoMapper.toEntity(dadosMedico), API,uriBuilder);
     }
 
     @PutMapping("/{id}")
