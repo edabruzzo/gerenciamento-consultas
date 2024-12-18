@@ -2,11 +2,12 @@ package br.com.abruzzo.med.voll.dominio.entidades;
 
 import br.com.abruzzo.med.voll.dominio.enums.EspecialidadeEnum;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="tb_medico")
 public class Medico extends Pessoa {
@@ -14,6 +15,7 @@ public class Medico extends Pessoa {
     private String crm;
 
     @Enumerated(EnumType.STRING)
-    private EspecialidadeEnum especialidadeEnum;
+    @Column(name = "in_especialidade")
+    private EspecialidadeEnum especialidade;
 
 }

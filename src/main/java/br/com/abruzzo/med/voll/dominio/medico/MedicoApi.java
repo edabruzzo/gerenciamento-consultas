@@ -7,15 +7,14 @@ import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 import br.com.abruzzo.med.voll.core.model.mappers.BaseMapper;
 import br.com.abruzzo.med.voll.core.service.CrudBaseService;
 import br.com.abruzzo.med.voll.dominio.entidades.Medico;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
     private final MedicoService medicoService;
-
     private final MedicoMapper medicoMapper;
 
     @Override
@@ -37,6 +35,7 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
     }
 
 
+    @GetMapping
     public ResponseEntity<RespostaPaginada<MedicoDto>> listarMedicos(
             @PageableDefault(sort = "nome", direction = Sort.Direction.ASC, page = 0, size = 20)
             @ParameterObject Pageable pageable,
@@ -45,8 +44,9 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
     }
 
 
-
-
-
+    @PostMapping("/cadastrar")
+    public void cadastrar(@RequestBody @Valid MedicoDto dadosMedico){
+        this.medicoService.salvar(this.medicoMapper.toEntity(dadosMedico));
+    }
 
 }

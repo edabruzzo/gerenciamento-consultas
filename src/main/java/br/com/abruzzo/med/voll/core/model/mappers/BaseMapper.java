@@ -5,7 +5,7 @@ import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 
 import java.util.List;
 
-public interface BaseMapper<E extends EntidadeBase<?>, D extends DtoBase> {
+public interface BaseMapper<E, D> {
     D toDto(E entity);
 
     List<D> toDto(List<E> listEntity);

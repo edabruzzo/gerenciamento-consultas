@@ -1,4 +1,22 @@
 package br.com.abruzzo.med.voll.dominio.medico;
 
-public record DadosEnderecoDto(String logradouro, String numero, String cep, String bairro, String cidade, String uf, String complemento) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
+public record DadosEnderecoDto (
+        @NotBlank
+        String logradouro,
+        @NotBlank
+        String bairro,
+        @NotBlank
+        @Pattern(regexp = "\\d{5}-\\d{3}")
+        String cep,
+        @NotBlank
+        String cidade,
+        @NotBlank
+        String uf,
+        String complemento,
+
+        @NotBlank
+        String numero) {
 }

@@ -32,7 +32,7 @@ services:
       - PSQL_SERVICO_USERNAME=${PSQL_SERVICO_USER:?error}
       - PSQL_SERVICO_PASSWORD=${PSQL_SERVICO_PASS:?error}
     ports:
-      - "9091:8080"
+      - "9091:9091"
     depends_on:
       - med_voll_db_postgres
     entrypoint: ["sh", "/usr/local/bin/wait-for-it", "med_voll_db_postgres:5432", "--", "java", "-jar", "/opt/java/app.jar"]

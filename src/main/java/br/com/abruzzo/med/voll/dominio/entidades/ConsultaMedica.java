@@ -10,9 +10,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@NoArgsConstructor
 @Table(name = "tb_consulta_medica")
 public class ConsultaMedica implements EntidadeBase<Long> {
 
@@ -21,29 +20,8 @@ public class ConsultaMedica implements EntidadeBase<Long> {
     @Column(name = "id_consulta_medica", nullable = false)
     private Long id;
 
+    @Column(name = "dt_consulta", nullable = false)
     private LocalDateTime dataConsulta;
 
-    /*
-    private Medico medico;
-    private FilialClinica clinica;
-    private Paciente paciente;
 
-     */
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getDataConsulta() {
-        return dataConsulta;
-    }
-
-    public void setDataConsulta(LocalDateTime dataConsulta) {
-        this.dataConsulta = dataConsulta;
-    }
 }
