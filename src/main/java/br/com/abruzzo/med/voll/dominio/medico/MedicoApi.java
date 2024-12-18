@@ -1,6 +1,7 @@
 package br.com.abruzzo.med.voll.dominio.medico;
 
 import br.com.abruzzo.med.voll.api.CrudBaseApi;
+import br.com.abruzzo.med.voll.core.model.Resposta;
 import br.com.abruzzo.med.voll.core.model.RespostaPaginada;
 import br.com.abruzzo.med.voll.core.model.dto.DtoBase;
 import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
@@ -37,7 +38,7 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
     @GetMapping
     public ResponseEntity<RespostaPaginada<MedicoDto>> listarMedicos(
-            @PageableDefault(sort = "nome", direction = Sort.Direction.ASC, page = 0, size = 20)
+            @PageableDefault(sort = "pessoa.nome", direction = Sort.Direction.ASC, page = 0, size = 20)
             @ParameterObject Pageable pageable,
             @ParameterObject MedicoDto filtro) {
         return listarPaginado(pageable,this.medicoMapper.toEntity(filtro));
@@ -45,8 +46,22 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
 
 
     @PostMapping("/cadastrar")
-    public void cadastrar(@RequestBody @Valid MedicoDto dadosMedico){
-        this.medicoService.salvar(this.medicoMapper.toEntity(dadosMedico));
+    public ResponseEntity<Resposta<MedicoDto>> cadastrar(@RequestBody @Valid MedicoDto dadosMedico){
+        return this.inserir(this.medicoMapper.toEntity(dadosMedico));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Resposta> atualizar(
+            @PathVariable Long id,
+            @RequestBody @Valid MedicoAtualizarDto dados) {
+        Medico medico = this.medicoMapper.dtoAtualizartoEntity(dados);
+        medico.setId(id);
+        return this.atualizar(medico);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Resposta> remover(@PathVariable Long id){
+        return this.excluir(id);
     }
 
 }

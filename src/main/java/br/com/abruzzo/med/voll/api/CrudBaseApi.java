@@ -7,6 +7,10 @@ import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
 import br.com.abruzzo.med.voll.core.model.mappers.BaseMapper;
 import br.com.abruzzo.med.voll.core.service.CrudBaseService;
 import br.com.abruzzo.med.voll.exceptions.RecursoNaoEncontradoException;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.data.domain.Pageable;
@@ -31,25 +35,28 @@ public interface CrudBaseApi<E extends EntidadeBase<ID>, D extends DtoBase, ID> 
         return dadosRetorno;
     }
 
-    default ResponseEntity<Resposta<DtoBase>> buscar(ID id) throws RecursoNaoEncontradoException {
+    default ResponseEntity<Resposta<D>> buscar(ID id) throws RecursoNaoEncontradoException {
         EntidadeBase<ID> entidade = this.getService().buscar(id);
         DtoBase dto = this.getMapper().toDto(entidade);
         return this.ok(dto);
     }
 
-    default ResponseEntity<Resposta<DtoBase>> inserir(E dadosParaInclusao) {
+    default ResponseEntity<Resposta<D>> inserir(E dadosParaInclusao) {
         EntidadeBase<ID> entidadeIncluida = this.getService().inserir(dadosParaInclusao);
         DtoBase dtoRetorno = this.getMapper().toDto(entidadeIncluida);
         return this.enviarResposta(dtoRetorno, HttpStatus.CREATED);
     }
 
     default ResponseEntity<Resposta> atualizar(E dadosParaAlteracao) throws RecursoNaoEncontradoException {
-        this.getService().atualizar(dadosParaAlteracao);
-        return this.ok();
+        var entidadeAtual = this.getService().buscar(dadosParaAlteracao.getId());
+        entidadeAtual.atualizar(dadosParaAlteracao);
+        this.getService().atualizar(entidadeAtual);
+        return this.enviarResposta(this.getMapper().toDto(entidadeAtual), HttpStatus.OK);
     }
+
 
     default ResponseEntity<Resposta> excluir(ID id) throws RecursoNaoEncontradoException {
         this.getService().excluir(id);
-        return this.ok();
+        return ResponseEntity.noContent().build();
     }
 }

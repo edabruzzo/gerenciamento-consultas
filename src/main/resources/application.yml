@@ -31,16 +31,15 @@ spring:
   jpa:
     show-sql: true
     url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: update
-
-    #properties:
-    #  hibernate:
-    #    dialect: org.hibernate.dialect.PostgreSQLDialect
-    #    ddl-auto: update
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   flyway:
-    enabled: false
+    enabled: true
     url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
     user: ${PSQL_SERVICO_USERNAME:?error}
     password: ${PSQL_SERVICO_PASSWORD:?error}

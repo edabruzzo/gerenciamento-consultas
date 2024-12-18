@@ -11,21 +11,13 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 public record MedicoDto(
-        @NotBlank
-        String nome,
-        @NotBlank
-        @Email
-        String email,
-        @NotBlank @CPF
-        String cpf,
+
+        @Valid
+        PessoaDto pessoa,
 
         @Pattern(regexp = "\\d{4,6}")
         String crm,
 
         @NotNull
-        EspecialidadeEnum especialidade,
-
-        @Valid
-        @NotNull
-        DadosEnderecoDto endereco) implements DtoBase {
+        EspecialidadeEnum especialidade) implements DtoBase {
 }

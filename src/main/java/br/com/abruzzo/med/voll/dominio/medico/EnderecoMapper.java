@@ -10,4 +10,6 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EnderecoMapper extends BaseMapper<Endereco, DadosEnderecoDto>{
+
+    Endereco dtoAtualizarToEntity(DadosEnderecoAtualizarDto dto);
 }
