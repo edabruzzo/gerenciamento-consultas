@@ -10,18 +10,31 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
-public record PessoaDto(@NotBlank
-                        String nome,
-                        @NotBlank
-                        @Email
-                        String email,
-                        @NotBlank @CPF
-                        String cpf,
-                        @Valid @Past @NotNull
-                        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-                        LocalDate dataNascimento,
+public record PessoaDto(
 
-                        @Valid
-                        @NotNull
-                        DadosEnderecoDto endereco) {
+        @NotBlank(message = "Nome é obrigatório")
+        String nome,
+
+        @NotBlank(message = "Email é obrigatório")
+        @Email(message = "Formato do email é inválido")
+        String email,
+
+        @NotBlank(message = "Telefone é obrigatório")
+        String telefone,
+
+        @NotBlank(message = "CPF é obrigatório")
+        @CPF(message = "Cadastro de Pessoa Física inválido")
+        String cpf,
+
+        @Valid
+        @Past(message = "Não é possível cadastrar data de nascimento futura")
+        @NotNull(message = "Data de nascimento (dd/MM/yyyy) é obrigatória")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+        LocalDate dataNascimento,
+
+        @NotNull(message = "Dados do endereço são obrigatórios")
+        @Valid DadosEnderecoDto endereco) {
+
 }
+
+

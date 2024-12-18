@@ -13,11 +13,13 @@ import org.hibernate.validator.constraints.br.CPF;
 public record MedicoDto(
 
         @Valid
+        @NotNull(message = "Dados básicos da pessoa são obrigatórios")
         PessoaDto pessoa,
 
-        @Pattern(regexp = "\\d{4,6}")
+        @NotBlank(message = "CRM do médico é obrigatório")
+        @Pattern(regexp = "\\d{4,6}", message = "Formato do CRM é inválido")
         String crm,
 
-        @NotNull
+        @NotNull(message = "Especialidade médica é obrigatória")
         EspecialidadeEnum especialidade) implements DtoBase {
 }
