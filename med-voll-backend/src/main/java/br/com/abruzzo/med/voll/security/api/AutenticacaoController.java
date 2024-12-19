@@ -1,10 +1,7 @@
 package br.com.abruzzo.med.voll.security.api;
 
-import br.com.abruzzo.med.voll.api.BaseApi;
-import br.com.abruzzo.med.voll.core.model.Resposta;
-import br.com.abruzzo.med.voll.exceptions.MensagemErroEnum;
-import br.com.abruzzo.med.voll.security.dto.DadosAutenticacaoDto;
-import br.com.abruzzo.med.voll.security.service.AutenticacaoService;
+import br.com.abruzzo.med.voll.security.security.MyUserDetailsService;
+import br.com.abruzzo.med.voll.security.security.dto.DadosAutenticacaoDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/login-alternativa")
 @RequiredArgsConstructor
-public class AutenticacaoController implements BaseApi {
+public class AutenticacaoController {
 
-    private final AutenticacaoService autenticacaoService;
+    private final MyUserDetailsService autenticacaoService;
 
     private final AuthenticationManager authenticationManager;
 
@@ -35,17 +32,15 @@ public class AutenticacaoController implements BaseApi {
         );
         Authentication authentication = this.authenticationManager.authenticate(token);
         ResponseEntity resposta = authentication.isAuthenticated()
-                ? ok()
-        : this.enviarResposta(new Resposta<String>(
-                String.format(MensagemErroEnum.ERRO_AUTENTICACAO_USUARIO.getMensagem(),dadosLogin.login()))
-                , HttpStatus.UNAUTHORIZED);
+                ? ResponseEntity.ok().build()
+        : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return resposta;
     }
 
     @PostMapping("/cadastrar")
     public ResponseEntity cadastrar(@RequestBody @Valid DadosAutenticacaoDto dadosLogin) {
-        this.autenticacaoService.cadastrarNovoUsuario(dadosLogin);
-        return ok();
+        //this.autenticacaoService.cadastrarNovoUsuario(dadosLogin);
+        return ResponseEntity.ok().build();
     }
 
 

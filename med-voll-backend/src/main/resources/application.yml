@@ -5,7 +5,7 @@ info:
     build-date: ^build.datahora^
 
 server:
-  port: ${PORTA_API}
+  port: ${PORTA_API_BACKEND}
   servlet:
     context-path: /med-voll-api # Contexto padrao
   error:
@@ -13,24 +13,58 @@ server:
     whitelabel:
       enabled: false
 
-#med-voll:
-  #app-seguranca-service: ${SEGURANCA_URL}
+med-voll:
+  app-seguranca-service: ${SEGURANCA_URL}
 
 spring:
+  ##### activate dev profile
+  #profiles:
+    #active=dev
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    protocol: smtps
+    username: ${MAIL_USERNAME}@gmail.com
+    password: ${MAIL_PASSWORD}
+    allow-bean-definition-overriding: true
+    properties:
+      mail:
+        transport:
+          protocol: smtps
+        smtps:
+          auth: true
+          starttls:
+            enable: true
+          timeout: 8000
+  thymeleaf:
+    cache: false
   application:
     name: med-voll-service
   config:
     import: "optional:file:./dev.properties"
+  #################### DataSource Configuration ##########################
   datasource:
+    ##### PostgreSQL
     url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
     username: ${PSQL_SERVICO_USERNAME:?error}
     password: ${PSQL_SERVICO_PASSWORD:?error}
     driver-class-name: org.postgresql.Driver
     validationQuery: select 1
+    ####### H2
+    ################### DataSource Configuration ##########################
+    #url: jdbc:h2:mem:registration_02;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #username: sa
+    #password:
+
   jpa:
     show-sql: true
+    ##### PostgreSQL
+    #################### DataSource Configuration ##########################
     url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
-    generate-ddl: false
+    ####### H2
+    ################### DataSource Configuration ##########################
+    #url: jdbc:h2:mem:registration_02;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    generate-ddl: true
     hibernate:
       ddl-auto: update
     properties:
@@ -38,10 +72,17 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
   flyway:
-    enabled: true
+    enabled: false
+    ##### PostgreSQL
+    #################### DataSource Configuration ##########################
     url: jdbc:postgresql://${PSQL_SERVER}:${PSQL_SERVER_PORT}/${PSQL_DATABASE}
     user: ${PSQL_SERVICO_USERNAME:?error}
     password: ${PSQL_SERVICO_PASSWORD:?error}
+    ####### H2
+    ################### DataSource Configuration ##########################
+    #url: jdbc:h2:mem:registration_02;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    #user: sa
+    #password:
   data:
     rest:
       default-media-type: application/json
@@ -73,7 +114,7 @@ management:
       exposure:
         include: health, info
 
-# Configura��o de logging
+# Configuração de logging
 logging:
   level:
     # Mais log: DEBUG
@@ -82,3 +123,27 @@ logging:
     org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE:DEBUG}
     # Mais info: TRACE
     org.hibernate.type.descriptor.sql: ${LOG_LEVEL_HIBERNATE_DESCRIPTOR:TRACE}
+
+purge:
+  cron:
+    expression: 0 0 5 * * ?
+
+#Feature toggle for geo ip lib
+geo:
+  ip:
+    lib:
+      enabled: false
+
+# recaptcha v3 keys
+google:
+  recaptcha:
+    key:
+      site: ${GOOGLE_RECAPTCHA_KEY_SITE}
+      secret: ${GOOGLE_RECAPTCHA_SECRET_KEY}
+      threshold: 0.5
+  
+################### JavaMail Configuration ##########################
+support:
+  email:
+    ${MAIL_USERNAME}@gmail.com
+

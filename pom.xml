@@ -39,7 +39,6 @@
     </scm>
 
     <modules>
-        <module>med-voll-security</module>
         <module>med-voll-backend</module>
     </modules>
 

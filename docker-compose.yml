@@ -20,12 +20,13 @@ services:
     networks:
       - med-voll-network
 
-  med-voll-security:
-    build: med-voll-security/docker
+  med-voll-backend:
+    build: med-voll-backend/docker
     image: amazoncorretto:17.0.7-alpine
-    container_name: med-voll-security
+    container_name: med-voll-backend
     environment:
-      - PORTA_API=9092
+      - PORTA_API_BACKEND=${PORTA_API_BACKEND}
+      - PORTA_API_SECURITY=${PORTA_API_SECURITY}
       - GOOGLE_RECAPTCHA_KEY_SITE=${GOOGLE_RECAPTCHA_KEY}
       - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET}
       - MAIL_USERNAME=${MAIL_USER}
@@ -36,28 +37,7 @@ services:
       - PSQL_SERVICO_USERNAME=${PSQL_SERVICO_USER:?error}
       - PSQL_SERVICO_PASSWORD=${PSQL_SERVICO_PASS:?error}
     ports:
-      - "9092:9092"
-    depends_on:
-      - med_voll_db_postgres
-    entrypoint: [ "sh", "/usr/local/bin/wait-for-it", "med_voll_db_postgres:5432", "--", "java", "-jar", "/opt/java/app.jar" ]
-    networks:
-      - med-voll-network
-    volumes:
-      - ./med-voll-security/target/med-voll-security.jar:/opt/java/app.jar
-
-  med-voll-backend:
-    build: med-voll-backend/docker
-    image: amazoncorretto:17.0.7-alpine
-    container_name: med-voll-backend
-    environment:
-      - PORTA_API=9091
-      - PSQL_SERVER=med_voll_db_postgres
-      - PSQL_SERVER_PORT=5432
-      - PSQL_DATABASE=${PSQL_DATABASE:?error}
-      - PSQL_SERVICO_USERNAME=${PSQL_SERVICO_USER:?error}
-      - PSQL_SERVICO_PASSWORD=${PSQL_SERVICO_PASS:?error}
-    ports:
-      - "9091:9091"
+      - "${PORTA_API_BACKEND}:${PORTA_API_BACKEND}"
     depends_on:
       - med-voll-security
       - med_voll_db_postgres
