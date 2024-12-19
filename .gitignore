@@ -33,5 +33,9 @@ build/
 .vscode/
 
 ### ENV ###
+!**/.env
+./.env
 .env
-/rodar.sh
+./rodar.sh
+rodar.sh
+./hidden
