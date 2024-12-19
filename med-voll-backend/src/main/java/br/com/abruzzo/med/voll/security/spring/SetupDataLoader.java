@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.List;
 
 import br.com.abruzzo.med.voll.security.persistence.dao.PrivilegeRepository;
-import br.com.abruzzo.med.voll.security.persistence.dao.PapelSistemaRepository;
+import br.com.abruzzo.med.voll.security.persistence.dao.RolesRepository;
 import br.com.abruzzo.med.voll.security.persistence.dao.UserRepository;
 import br.com.abruzzo.med.voll.security.persistence.model.Privilege;
-import br.com.abruzzo.med.voll.security.persistence.model.PapelSistema;
+import br.com.abruzzo.med.voll.security.persistence.model.Role;
 import br.com.abruzzo.med.voll.security.persistence.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -27,7 +27,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private UserRepository userRepository;
 
     @Autowired
-    private PapelSistemaRepository papelSistemaRepository;
+    private RolesRepository rolesRepository;
 
     @Autowired
     private PrivilegeRepository privilegeRepository;
@@ -52,11 +52,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         // == create initial PapelSistemas
         final List<Privilege> adminPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
         final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(readPrivilege, passwordPrivilege));
-        final PapelSistema adminPapelSistema = createPapelSistemaIfNotFound("PapelSistema_ADMIN", adminPrivileges);
-        createPapelSistemaIfNotFound("PapelSistema_USER", userPrivileges);
+        final Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
+        createRoleIfNotFound("ROLE_USER", userPrivileges);
 
         // == create initial user
-        createUserIfNotFound("test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminPapelSistema)));
+        createUserIfNotFound("test@test.com", "Test", "Test", "test", new ArrayList<>(Arrays.asList(adminRole)));
 
         alreadySetup = true;
     }
@@ -72,18 +72,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public PapelSistema createPapelSistemaIfNotFound(final String name, final Collection<Privilege> privileges) {
-        PapelSistema PapelSistema = papelSistemaRepository.findByName(name);
-        if (PapelSistema == null) {
-            PapelSistema = new PapelSistema(name);
+    public Role createRoleIfNotFound(final String name, final Collection<Privilege> privileges) {
+        Role Role = rolesRepository.findByName(name);
+        if (Role == null) {
+            Role = new Role(name);
         }
-        PapelSistema.setPrivileges(privileges);
-        PapelSistema = papelSistemaRepository.save(PapelSistema);
-        return PapelSistema;
+        Role.setPrivileges(privileges);
+        Role = rolesRepository.save(Role);
+        return Role;
     }
 
     @Transactional
-    public User createUserIfNotFound(final String email, final String firstName, final String lastName, final String password, final Collection<PapelSistema> PapelSistemas) {
+    public User createUserIfNotFound(final String email, final String firstName, final String lastName, final String password, final Collection<Role> roles) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User();
@@ -93,7 +93,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setEmail(email);
             user.setEnabled(true);
         }
-        user.setRoles(PapelSistemas);
+        user.setRoles(roles);
         user = userRepository.save(user);
         return user;
     }

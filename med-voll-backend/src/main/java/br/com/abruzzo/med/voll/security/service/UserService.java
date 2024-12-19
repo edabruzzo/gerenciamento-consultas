@@ -84,6 +84,22 @@ public class UserService implements IUserService {
         return userRepository.save(user);
     }
 
+
+    public User registerNewAdminAccount(final UserDto accountDto) {
+        if (emailExists(accountDto.getEmail())) {
+            throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
+        }
+        final User user = new User();
+
+        user.setFirstName(accountDto.getFirstName());
+        user.setLastName(accountDto.getLastName());
+        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+        user.setEmail(accountDto.getEmail());
+        user.setUsing2FA(accountDto.isUsing2FA());
+        user.setRoles(roleRepository.findAll());
+        return userRepository.save(user);
+    }
+
     @Override
     public User getUser(final String verificationToken) {
         final VerificationToken token = tokenRepository.findByToken(verificationToken);

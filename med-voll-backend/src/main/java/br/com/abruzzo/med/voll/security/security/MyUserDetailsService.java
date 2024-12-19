@@ -1,10 +1,11 @@
 package br.com.abruzzo.med.voll.security.security;
 
+import br.com.abruzzo.med.voll.security.persistence.dao.RolesRepository;
 import br.com.abruzzo.med.voll.security.persistence.dao.UserRepository;
 import br.com.abruzzo.med.voll.security.persistence.model.Privilege;
-import br.com.abruzzo.med.voll.security.persistence.model.PapelSistema;
+import br.com.abruzzo.med.voll.security.persistence.model.Role;
 import br.com.abruzzo.med.voll.security.persistence.model.User;
-import br.com.abruzzo.med.voll.security.security.dto.DadosAutenticacaoDto;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service("userDetailsService")
+@NoArgsConstructor
 @Transactional
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -26,11 +28,11 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private RolesRepository rolesRepository;
+
+    @Autowired
     private LoginAttemptService loginAttemptService;
 
-    public MyUserDetailsService() {
-        super();
-    }
 
     // API
 
@@ -54,16 +56,16 @@ public class MyUserDetailsService implements UserDetailsService {
 
     // UTIL
 
-    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<PapelSistema> PapelSistemas) {
-        return getGrantedAuthorities(getPrivileges(PapelSistemas));
+    private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
+        return getGrantedAuthorities(getPrivileges(roles));
     }
 
-    private List<String> getPrivileges(final Collection<PapelSistema> PapelSistemas) {
+    private List<String> getPrivileges(final Collection<Role> roles) {
         final List<String> privileges = new ArrayList<>();
         final List<Privilege> collection = new ArrayList<>();
-        for (final PapelSistema PapelSistema : PapelSistemas) {
-            privileges.add(PapelSistema.getName());
-            collection.addAll(PapelSistema.getPrivileges());
+        for (final Role Role : roles) {
+            privileges.add(Role.getName());
+            collection.addAll(Role.getPrivileges());
         }
         for (final Privilege item : collection) {
             privileges.add(item.getName());
@@ -79,22 +81,5 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         return authorities;
     }
-
-
-    /*
-    @jakarta.transaction.Transactional
-    public void cadastrarNovoUsuario(DadosAutenticacaoDto dadosLogin) {
-        User usuario = new User();
-        usuario.setEmail(dadosLogin.login());
-        usuario.setPassword(this.passwordEncoder.encode(usuario.getPassword()));
-        this.userRepository.save(usuario);
-        PapelSistema papel = new PapelSistema();
-        papel.setName(dadosLogin.papel().name());
-        papel = this.papelRepository.save(papel);
-        usuario.getRoles().add(papel);
-        this.userRepository.save(usuario);
-    }
-
-     */
 
 }

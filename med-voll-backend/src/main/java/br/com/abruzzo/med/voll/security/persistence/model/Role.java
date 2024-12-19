@@ -9,11 +9,10 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString
-@Table(name = "tb_papel_sistema")
 @EqualsAndHashCode(of="id")
 @NoArgsConstructor
 @AllArgsConstructor
-public class PapelSistema {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,12 +22,14 @@ public class PapelSistema {
     private Collection<User> users;
 
     @ManyToMany
-    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+    @JoinTable(name = "roles_privileges",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges;
 
     private String name;
 
-    public PapelSistema(final String name) {
+    public Role(final String name) {
         super();
         this.name = name;
     }

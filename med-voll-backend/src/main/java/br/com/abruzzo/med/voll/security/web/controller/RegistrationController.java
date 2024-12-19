@@ -1,6 +1,6 @@
 package br.com.abruzzo.med.voll.security.web.controller;
 
-import br.com.abruzzo.med.voll.security.persistence.model.PapelSistema;
+import br.com.abruzzo.med.voll.security.persistence.model.Role;
 import br.com.abruzzo.med.voll.security.persistence.model.Privilege;
 import br.com.abruzzo.med.voll.security.persistence.model.User;
 import br.com.abruzzo.med.voll.security.security.ISecurityUserService;
@@ -142,6 +142,8 @@ public class RegistrationController {
         return new ModelAndView("login", model);
     }
 
+
+
     @RequestMapping(value = "/user/enableNewLoc", method = RequestMethod.GET)
     public String enableNewLoc(Locale locale, Model model, @RequestParam("token") String token) {
         final String loc = userService.isValidNewLocationToken(token);
@@ -159,7 +161,7 @@ public class RegistrationController {
 
         List<Privilege> privileges = user.getRoles()
                 .stream()
-                .map(PapelSistema::getPrivileges)
+                .map(Role::getPrivileges)
                 .flatMap(Collection::stream)
                 .distinct()
                 .collect(Collectors.toList());

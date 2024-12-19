@@ -2,11 +2,19 @@ package br.com.abruzzo.med.voll.security.security;
 
 import jakarta.servlet.http.HttpSessionBindingEvent;
 import jakarta.servlet.http.HttpSessionBindingListener;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Component
 public class LoggedUser implements HttpSessionBindingListener, Serializable {
     private static final long serialVersionUID = 1L;
@@ -14,13 +22,7 @@ public class LoggedUser implements HttpSessionBindingListener, Serializable {
     private String username;
     private ActiveUserStore activeUserStore;
 
-    public LoggedUser(String username, ActiveUserStore activeUserStore) {
-        this.username = username;
-        this.activeUserStore = activeUserStore;
-    }
 
-    public LoggedUser() {
-    }
 
     @Override
     public void valueBound(HttpSessionBindingEvent event) {
@@ -38,11 +40,4 @@ public class LoggedUser implements HttpSessionBindingListener, Serializable {
         users.remove(user.getUsername());
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }

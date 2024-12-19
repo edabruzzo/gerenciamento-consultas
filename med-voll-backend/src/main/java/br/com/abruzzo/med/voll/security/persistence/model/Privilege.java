@@ -22,7 +22,7 @@ public class Privilege {
     private String name;
 
     @ManyToMany(mappedBy = "privileges")
-    private Collection<PapelSistema> roles;
+    private Collection<Role> roles;
 
     public Privilege(final String name) {
         super();
