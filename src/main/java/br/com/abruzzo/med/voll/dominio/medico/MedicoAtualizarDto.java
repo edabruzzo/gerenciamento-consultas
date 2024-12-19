@@ -8,7 +8,8 @@ import jakarta.validation.constraints.Pattern;
 
 public record MedicoAtualizarDto(@Valid
                                  PessoaAtualizarDto pessoa,
-                                 @Pattern(regexp = "\\d{4,6}")
+                                 @Pattern(regexp = "\\d{4,6}",
+                                         message = "{crm.invalido}")
                                  String crm,
                                  EspecialidadeEnum especialidade
 

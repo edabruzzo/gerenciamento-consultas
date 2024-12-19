@@ -27,12 +27,12 @@ public record PessoaDto(
         String cpf,
 
         @Valid
-        @Past(message = "Não é possível cadastrar data de nascimento futura")
-        @NotNull(message = "Data de nascimento (dd/MM/yyyy) é obrigatória")
+        @Past(message = "{dataNascimento.invalida}")
+        @NotNull(message = "{dataNascimento.obrigatoria}")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate dataNascimento,
 
-        @NotNull(message = "Dados do endereço são obrigatórios")
+        @NotNull(message = "{endereco.obrigatorio}")
         @Valid DadosEnderecoDto endereco) {
 
 }

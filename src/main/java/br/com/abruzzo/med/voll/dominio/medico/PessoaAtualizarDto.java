@@ -12,11 +12,12 @@ import java.time.LocalDate;
 
 public record PessoaAtualizarDto(
                         String nome,
-                        @Email
+                        @Email(message = "{email.invalido}")
                         String email,
-                        @CPF
+                        @CPF(message = "{cpf.invalido}")
                         String cpf,
-                        @Valid @Past
+                        @Valid
+                        @Past(message = "{dataNascimento.invalida}")
                         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
                         LocalDate dataNascimento,
 
