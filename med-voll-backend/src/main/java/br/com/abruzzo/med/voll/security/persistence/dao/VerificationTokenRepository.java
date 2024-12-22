@@ -1,6 +1,6 @@
 package br.com.abruzzo.med.voll.security.persistence.dao;
 
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import br.com.abruzzo.med.voll.security.persistence.model.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +15,7 @@ public interface VerificationTokenRepository extends JpaRepository<VerificationT
 
     VerificationToken findByToken(String token);
 
-    VerificationToken findByUser(User user);
+    VerificationToken findByUser(Usuario user);
 
     Stream<VerificationToken> findAllByExpiryDateLessThan(Date now);
 

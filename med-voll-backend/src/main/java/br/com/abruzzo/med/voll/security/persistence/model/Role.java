@@ -8,7 +8,6 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode(of="id")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +18,7 @@ public class Role {
     private Long id;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    private Collection<Usuario> users;
 
     @ManyToMany
     @JoinTable(name = "roles_privileges",
@@ -34,4 +33,11 @@ public class Role {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

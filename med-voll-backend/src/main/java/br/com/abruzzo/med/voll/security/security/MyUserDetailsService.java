@@ -4,7 +4,7 @@ import br.com.abruzzo.med.voll.security.persistence.dao.RolesRepository;
 import br.com.abruzzo.med.voll.security.persistence.dao.UserRepository;
 import br.com.abruzzo.med.voll.security.persistence.model.Privilege;
 import br.com.abruzzo.med.voll.security.persistence.model.Role;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,7 +43,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         try {
-            final User user = userRepository.findByEmail(email);
+            final Usuario user = userRepository.findByEmail(email);
             if (user == null) {
                 throw new UsernameNotFoundException("No user found with username: " + email);
             }

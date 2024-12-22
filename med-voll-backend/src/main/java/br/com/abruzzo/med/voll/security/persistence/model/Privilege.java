@@ -8,7 +8,6 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-@ToString
 @Table(name = "tb_privilegio")
 @EqualsAndHashCode(of="id")
 @NoArgsConstructor
@@ -27,5 +26,13 @@ public class Privilege {
     public Privilege(final String name) {
         super();
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Privilege{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

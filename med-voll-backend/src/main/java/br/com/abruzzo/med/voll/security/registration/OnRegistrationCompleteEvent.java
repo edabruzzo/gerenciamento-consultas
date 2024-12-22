@@ -1,6 +1,6 @@
 package br.com.abruzzo.med.voll.security.registration;
 
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.Locale;
@@ -10,9 +10,9 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
     private final String appUrl;
     private final Locale locale;
-    private final User user;
+    private final Usuario user;
 
-    public OnRegistrationCompleteEvent(final User user, final Locale locale, final String appUrl) {
+    public OnRegistrationCompleteEvent(final Usuario user, final Locale locale, final String appUrl) {
         super(user);
         this.user = user;
         this.locale = locale;
@@ -29,7 +29,7 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
         return locale;
     }
 
-    public User getUser() {
+    public Usuario getUser() {
         return user;
     }
 

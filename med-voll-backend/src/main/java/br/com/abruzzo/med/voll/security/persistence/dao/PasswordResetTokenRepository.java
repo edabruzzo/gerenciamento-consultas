@@ -1,7 +1,7 @@
 package br.com.abruzzo.med.voll.security.persistence.dao;
 
 import br.com.abruzzo.med.voll.security.persistence.model.PasswordResetToken;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +15,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
 
     PasswordResetToken findByToken(String token);
 
-    PasswordResetToken findByUser(User user);
+    PasswordResetToken findByUser(Usuario user);
 
     Stream<PasswordResetToken> findAllByExpiryDateLessThan(Date now);
 

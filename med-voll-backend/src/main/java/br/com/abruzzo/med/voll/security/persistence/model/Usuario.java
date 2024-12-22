@@ -8,11 +8,10 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode(of="id")
 @AllArgsConstructor
 @Table(name = "tb_user_account")
-public class User {
+public class Usuario {
 
     @Id
     @Column(unique = true, nullable = false)
@@ -34,14 +33,28 @@ public class User {
 
     private String secret;
 
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    public User() {
+    public Usuario() {
         this.enabled = false;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", isUsing2FA=" + isUsing2FA +
+                ", secret='" + secret + '\'' +
+                '}';
+    }
 }

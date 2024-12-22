@@ -1,12 +1,11 @@
 package br.com.abruzzo.med.voll.dominio.entidades;
 
 import br.com.abruzzo.med.voll.core.model.entities.EntidadeBase;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -21,13 +20,17 @@ import java.time.LocalDate;
 public class Pessoa implements EntidadeBase<Long>{
 
     @Id
-    @Column(name = "id_pessoa")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
 
     @Email
     private String email;
+
+    @MapsId
+    @JoinColumn(name = "id_pessoa")
+    @ToString.Exclude
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Usuario usuario;
 
     @CPF
     @Column(unique = true, nullable = false)

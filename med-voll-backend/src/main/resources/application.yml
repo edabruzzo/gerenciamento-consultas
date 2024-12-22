@@ -13,9 +13,6 @@ server:
     whitelabel:
       enabled: false
 
-med-voll:
-  app-seguranca-service: ${SEGURANCA_URL}
-
 spring:
   ##### activate dev profile
   #profiles:
@@ -147,3 +144,8 @@ support:
   email:
     ${MAIL_USERNAME}@gmail.com
 
+
+med-voll:
+  app-seguranca-service: ${SEGURANCA_URL}
+  jwt:
+    secret: ${JWT_SECRET}

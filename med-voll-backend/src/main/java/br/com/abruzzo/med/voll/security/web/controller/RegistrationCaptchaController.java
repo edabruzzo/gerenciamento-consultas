@@ -2,7 +2,7 @@ package br.com.abruzzo.med.voll.security.web.controller;
 
 import br.com.abruzzo.med.voll.security.captcha.CaptchaServiceV3;
 import br.com.abruzzo.med.voll.security.captcha.ICaptchaService;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import br.com.abruzzo.med.voll.security.registration.OnRegistrationCompleteEvent;
 import br.com.abruzzo.med.voll.security.service.IUserService;
 import br.com.abruzzo.med.voll.security.web.dto.UserDto;
@@ -60,7 +60,7 @@ public class RegistrationCaptchaController {
     private GenericResponse registerNewUserHandler(final UserDto accountDto, final HttpServletRequest request) {
         LOGGER.debug("Registering user account with information: {}", accountDto);
 
-        final User registered = userService.registerNewUserAccount(accountDto);
+        final Usuario registered = userService.registerNewUserAccount(accountDto);
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
         return new GenericResponse("success");
     }

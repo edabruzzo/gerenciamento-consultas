@@ -2,7 +2,7 @@ package br.com.abruzzo.med.voll.security.service;
 
 import br.com.abruzzo.med.voll.security.persistence.model.NewLocationToken;
 import br.com.abruzzo.med.voll.security.persistence.model.PasswordResetToken;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import br.com.abruzzo.med.voll.security.persistence.model.VerificationToken;
 import br.com.abruzzo.med.voll.security.web.dto.UserDto;
 
@@ -12,39 +12,39 @@ import java.util.Optional;
 
 public interface IUserService {
 
-    User registerNewUserAccount(UserDto accountDto);
+    Usuario registerNewUserAccount(UserDto accountDto);
 
-    User getUser(String verificationToken);
+    Usuario getUser(String verificationToken);
 
-    void saveRegisteredUser(User user);
+    void saveRegisteredUser(Usuario user);
 
-    void deleteUser(User user);
+    void deleteUser(Usuario user);
 
-    void createVerificationTokenForUser(User user, String token);
+    void createVerificationTokenForUser(Usuario user, String token);
 
     VerificationToken getVerificationToken(String VerificationToken);
 
     VerificationToken generateNewVerificationToken(String token);
 
-    void createPasswordResetTokenForUser(User user, String token);
+    void createPasswordResetTokenForUser(Usuario user, String token);
 
-    User findUserByEmail(String email);
+    Usuario findUserByEmail(String email);
 
     PasswordResetToken getPasswordResetToken(String token);
 
-    Optional<User> getUserByPasswordResetToken(String token);
+    Optional<Usuario> getUserByPasswordResetToken(String token);
 
-    Optional<User> getUserByID(long id);
+    Optional<Usuario> getUserByID(long id);
 
-    void changeUserPassword(User user, String password);
+    void changeUserPassword(Usuario user, String password);
 
-    boolean checkIfValidOldPassword(User user, String password);
+    boolean checkIfValidOldPassword(Usuario user, String password);
 
     String validateVerificationToken(String token);
 
-    String generateQRUrl(User user) throws UnsupportedEncodingException;
+    String generateQRUrl(Usuario user) throws UnsupportedEncodingException;
 
-    User updateUser2FA(boolean use2FA);
+    Usuario updateUser2FA(boolean use2FA);
 
     List<String> getUsersFromSessionRegistry();
 
@@ -52,5 +52,5 @@ public interface IUserService {
 
     String isValidNewLocationToken(String token);
 
-    void addUserLocation(User user, String ip);
+    void addUserLocation(Usuario user, String ip);
 }

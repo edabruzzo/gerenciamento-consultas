@@ -2,6 +2,7 @@ package br.com.abruzzo.med.voll.security.spring;
 
 import br.com.abruzzo.med.voll.security.persistence.dao.UserRepository;
 import br.com.abruzzo.med.voll.security.security.CustomRememberMeServices;
+import br.com.abruzzo.med.voll.security.security.filter.JwtAuthenticationFilter;
 import br.com.abruzzo.med.voll.security.security.google2fa.CustomAuthenticationProvider;
 import br.com.abruzzo.med.voll.security.security.google2fa.CustomWebAuthenticationDetailsSource;
 import br.com.abruzzo.med.voll.security.security.location.DifferentLocationChecker;
@@ -33,6 +34,7 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -40,6 +42,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @EnableWebSecurity
@@ -64,6 +68,9 @@ public class SecSecurityConfig {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
@@ -77,6 +84,8 @@ public class SecSecurityConfig {
             .requestMatchers(new AntPathRequestMatcher("/resources/**", "/h2/**"));
     }
 
+
+    /*
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -84,7 +93,7 @@ public class SecSecurityConfig {
             .authorizeHttpRequests(authz -> {
                 authz.requestMatchers(HttpMethod.GET, "/roleHierarchy")
                     .hasRole("STAFF")
-                    .requestMatchers("/login*", "login-alternativa*","/logout*", "/signin/**", "/signup/**", "/customLogin", "/user/registration*", "/registrationConfirm*", "/expiredAccount*", "/registration*", "/badUser*", "/user/resendRegistrationToken*", "/forgetPassword*",
+                    .requestMatchers("/login*", "/api/v1/auth/**","/logout*", "/signin/**", "/signup/**", "/customLogin", "/user/registration*", "/registrationConfirm*", "/expiredAccount*", "/registration*", "/badUser*", "/user/resendRegistrationToken*", "/forgetPassword*",
                         "/user/resetPassword*", "/user/savePassword*", "/updatePassword*", "/user/changePassword*", "/emailError*", "/resources/**", "/old/user/registration*", "/successRegister*", "/qrcode*", "/user/enableNewLoc*")
                     .permitAll()
                     .requestMatchers("/invalidSession*")
@@ -113,6 +122,19 @@ public class SecSecurityConfig {
                 .permitAll())
             .rememberMe((remember) -> remember.rememberMeServices(rememberMeServices()));
 
+        return http.build();
+    }
+     */
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth**")
+                        .permitAll().anyRequest().authenticated())
+                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
+                .authenticationProvider(authProvider())
+                    .addFilterBefore(
+                        jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

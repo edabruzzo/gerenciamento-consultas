@@ -25,6 +25,7 @@ services:
     image: amazoncorretto:17.0.7-alpine
     container_name: med-voll-backend
     environment:
+      - JWT_SECRET=${JWT_SECRET}
       - PORTA_API_BACKEND=${PORTA_API_BACKEND}
       - PORTA_API_SECURITY=${PORTA_API_SECURITY}
       - GOOGLE_RECAPTCHA_KEY_SITE=${GOOGLE_RECAPTCHA_KEY}

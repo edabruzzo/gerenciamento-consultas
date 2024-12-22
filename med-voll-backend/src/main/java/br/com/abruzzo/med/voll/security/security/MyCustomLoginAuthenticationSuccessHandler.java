@@ -1,6 +1,6 @@
 package br.com.abruzzo.med.voll.security.security;
 
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,8 +31,8 @@ public class MyCustomLoginAuthenticationSuccessHandler implements Authentication
         if (session != null) {
             session.setMaxInactiveInterval(30 * 60);
             String username;
-            if (authentication.getPrincipal() instanceof User) {
-            	username = ((User)authentication.getPrincipal()).getEmail();
+            if (authentication.getPrincipal() instanceof Usuario) {
+            	username = ((Usuario)authentication.getPrincipal()).getEmail();
             }
             else {
             	username = authentication.getName();
@@ -45,7 +45,7 @@ public class MyCustomLoginAuthenticationSuccessHandler implements Authentication
     }
 
     private String gerUserName(final Authentication authentication) {
-        return ((User) authentication.getPrincipal()).getFirstName();
+        return ((Usuario) authentication.getPrincipal()).getFirstName();
     }
 
     private void addWelcomeCookie(final String user, final HttpServletResponse response) {

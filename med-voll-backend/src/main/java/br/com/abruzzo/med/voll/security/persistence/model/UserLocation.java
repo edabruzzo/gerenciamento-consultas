@@ -19,15 +19,15 @@ public class UserLocation {
 
     private boolean enabled;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Usuario.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
-    private User user;
+    private Usuario user;
 
     public UserLocation() {
         enabled = false;
     }
 
-    public UserLocation(String country, User user) {
+    public UserLocation(String country, Usuario user) {
         super();
         this.country = country;
         this.user = user;

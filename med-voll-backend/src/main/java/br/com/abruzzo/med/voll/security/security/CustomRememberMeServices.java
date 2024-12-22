@@ -1,7 +1,7 @@
 package br.com.abruzzo.med.voll.security.security;
 
 import br.com.abruzzo.med.voll.security.persistence.dao.UserRepository;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
 
     @Override
     protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
-        String username = ((User) successfulAuthentication.getPrincipal()).getEmail();
+        String username = ((Usuario) successfulAuthentication.getPrincipal()).getEmail();
         logger.debug("Creating new persistent login for user " + username);
         PersistentRememberMeToken persistentToken = new PersistentRememberMeToken(username, generateSeriesData(), generateTokenData(), new Date());
         try {
@@ -50,7 +50,7 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
 
     @Override
     protected Authentication createSuccessfulAuthentication(HttpServletRequest request, UserDetails user) {
-        User auser = userRepository.findByEmail(user.getUsername());
+        Usuario auser = userRepository.findByEmail(user.getUsername());
         RememberMeAuthenticationToken auth = new RememberMeAuthenticationToken(key, auser, authoritiesMapper.mapAuthorities(user.getAuthorities()));
         auth.setDetails(authenticationDetailsSource.buildDetails(request));
         return auth;

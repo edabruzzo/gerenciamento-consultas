@@ -2,7 +2,7 @@ package br.com.abruzzo.med.voll.security.service;
 
 import br.com.abruzzo.med.voll.security.persistence.dao.DeviceMetadataRepository;
 import br.com.abruzzo.med.voll.security.persistence.model.DeviceMetadata;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import com.google.common.base.Strings;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
@@ -52,7 +52,7 @@ public class DeviceService {
     @Autowired
     private MessageSource messages;
 
-    public void verifyDevice(User user, HttpServletRequest request) throws IOException, GeoIp2Exception {
+    public void verifyDevice(Usuario user, HttpServletRequest request) throws IOException, GeoIp2Exception {
 
         String ip = extractIp(request);
         String location = getIpLocation(ip);

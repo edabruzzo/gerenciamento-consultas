@@ -1,7 +1,7 @@
 package br.com.abruzzo.med.voll.security.web.controller;
 
 import br.com.abruzzo.med.voll.security.persistence.model.PasswordResetToken;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import br.com.abruzzo.med.voll.security.persistence.model.VerificationToken;
 import br.com.abruzzo.med.voll.security.registration.OnRegistrationCompleteEvent;
 import br.com.abruzzo.med.voll.security.service.IUserService;
@@ -81,7 +81,7 @@ public class OldRegistrationController {
             return "redirect:/badUser.html?lang=" + locale.getLanguage();
         }
 
-        final User user = verificationToken.getUser();
+        final Usuario user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             model.addAttribute("message", messages.getMessage("auth.message.expired", null, locale));
@@ -101,7 +101,7 @@ public class OldRegistrationController {
         LOGGER.debug("Registering user account with information: {}", userDto);
 
         try {
-            final User registered = userService.registerNewUserAccount(userDto);
+            final Usuario registered = userService.registerNewUserAccount(userDto);
 
             final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
@@ -121,7 +121,7 @@ public class OldRegistrationController {
     public String resendRegistrationToken(final HttpServletRequest request, final Model model, @RequestParam("token") final String existingToken) {
         final Locale locale = request.getLocale();
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
-        final User user = userService.getUser(newToken.getToken());
+        final Usuario user = userService.getUser(newToken.getToken());
         try {
             final String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
             final SimpleMailMessage email = constructResetVerificationTokenEmail(appUrl, request.getLocale(), newToken, user);
@@ -140,7 +140,7 @@ public class OldRegistrationController {
 
     @PostMapping("/user/resetPassword")
     public String resetPassword(final HttpServletRequest request, final Model model, @RequestParam("email") final String userEmail) {
-        final User user = userService.findUserByEmail(userEmail);
+        final Usuario user = userService.findUserByEmail(userEmail);
         if (user == null) {
             model.addAttribute("message", messages.getMessage("message.userNotFound", null, request.getLocale()));
             return "redirect:/login.html?lang=" + request.getLocale().getLanguage();
@@ -192,7 +192,7 @@ public class OldRegistrationController {
     public String savePassword(final HttpServletRequest request, final Model model, @RequestParam("password") final String password) {
         final Locale locale = request.getLocale();
 
-        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final Usuario user = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.changeUserPassword(user, password);
         model.addAttribute("message", messages.getMessage("message.resetPasswordSuc", null, locale));
         return "redirect:/login.html?lang=" + locale;
@@ -200,7 +200,7 @@ public class OldRegistrationController {
 
     // NON-API
 
-    private SimpleMailMessage constructResetVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {
+    private SimpleMailMessage constructResetVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final Usuario user) {
         final String confirmationUrl = contextPath + "/old/registrationConfirm.html?token=" + newToken.getToken();
         final String message = messages.getMessage("message.resendToken", null, locale);
         final SimpleMailMessage email = new SimpleMailMessage();
@@ -211,7 +211,7 @@ public class OldRegistrationController {
         return email;
     }
 
-    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
+    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final Usuario user) {
         final String url = contextPath + "/old/user/changePassword?id=" + user.getId() + "&token=" + token;
         final String message = messages.getMessage("message.resetPassword", null, locale);
         final SimpleMailMessage email = new SimpleMailMessage();

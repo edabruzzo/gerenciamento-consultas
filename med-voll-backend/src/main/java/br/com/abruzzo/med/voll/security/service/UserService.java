@@ -69,11 +69,11 @@ public class UserService implements IUserService {
     // API
 
     @Override
-    public User registerNewUserAccount(final UserDto accountDto) {
+    public Usuario registerNewUserAccount(final UserDto accountDto) {
         if (emailExists(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
         }
-        final User user = new User();
+        final Usuario user = new Usuario();
 
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
@@ -85,11 +85,11 @@ public class UserService implements IUserService {
     }
 
 
-    public User registerNewAdminAccount(final UserDto accountDto) {
+    public Usuario registerNewAdminAccount(final UserDto accountDto) {
         if (emailExists(accountDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
         }
-        final User user = new User();
+        final Usuario user = new Usuario();
 
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
@@ -101,7 +101,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUser(final String verificationToken) {
+    public Usuario getUser(final String verificationToken) {
         final VerificationToken token = tokenRepository.findByToken(verificationToken);
         if (token != null) {
             return token.getUser();
@@ -115,12 +115,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void saveRegisteredUser(final User user) {
+    public void saveRegisteredUser(final Usuario user) {
         userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(final User user) {
+    public void deleteUser(final Usuario user) {
         final VerificationToken verificationToken = tokenRepository.findByUser(user);
 
         if (verificationToken != null) {
@@ -137,7 +137,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void createVerificationTokenForUser(final User user, final String token) {
+    public void createVerificationTokenForUser(final Usuario user, final String token) {
         final VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
     }
@@ -152,13 +152,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void createPasswordResetTokenForUser(final User user, final String token) {
+    public void createPasswordResetTokenForUser(final Usuario user, final String token) {
         final PasswordResetToken myToken = new PasswordResetToken(token, user);
         passwordTokenRepository.save(myToken);
     }
 
     @Override
-    public User findUserByEmail(final String email) {
+    public Usuario findUserByEmail(final String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -168,23 +168,23 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> getUserByPasswordResetToken(final String token) {
+    public Optional<Usuario> getUserByPasswordResetToken(final String token) {
         return Optional.ofNullable(passwordTokenRepository.findByToken(token) .getUser());
     }
 
     @Override
-    public Optional<User> getUserByID(final long id) {
+    public Optional<Usuario> getUserByID(final long id) {
         return userRepository.findById(id);
     }
 
     @Override
-    public void changeUserPassword(final User user, final String password) {
+    public void changeUserPassword(final Usuario user, final String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
 
     @Override
-    public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
+    public boolean checkIfValidOldPassword(final Usuario user, final String oldPassword) {
         return passwordEncoder.matches(oldPassword, user.getPassword());
     }
 
@@ -195,7 +195,7 @@ public class UserService implements IUserService {
             return TOKEN_INVALID;
         }
 
-        final User user = verificationToken.getUser();
+        final Usuario user = verificationToken.getUser();
         final Calendar cal = Calendar.getInstance();
         if ((verificationToken.getExpiryDate()
             .getTime() - cal.getTime()
@@ -211,15 +211,15 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String generateQRUrl(User user) throws UnsupportedEncodingException {
+    public String generateQRUrl(Usuario user) throws UnsupportedEncodingException {
         return QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", APP_NAME, user.getEmail(), user.getSecret(), APP_NAME), "UTF-8");
     }
 
     @Override
-    public User updateUser2FA(boolean use2FA) {
+    public Usuario updateUser2FA(boolean use2FA) {
         final Authentication curAuth = SecurityContextHolder.getContext()
             .getAuthentication();
-        User currentUser = (User) curAuth.getPrincipal();
+        Usuario currentUser = (Usuario) curAuth.getPrincipal();
         currentUser.setUsing2FA(use2FA);
         currentUser = userRepository.save(currentUser);
         final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
@@ -239,8 +239,8 @@ public class UserService implements IUserService {
             .filter((u) -> !sessionRegistry.getAllSessions(u, false)
                 .isEmpty())
             .map(o -> {
-                if (o instanceof User) {
-                    return ((User) o).getEmail();
+                if (o instanceof Usuario) {
+                    return ((Usuario) o).getEmail();
                 } else {
                     return o.toString()
             ;
@@ -261,7 +261,7 @@ public class UserService implements IUserService {
                 .getCountry()
                 .getName();
             System.out.println(country + "====****");
-            final User user = userRepository.findByEmail(username);
+            final Usuario user = userRepository.findByEmail(username);
             final UserLocation loc = userLocationRepository.findByCountryAndUser(country, user);
             if ((loc == null) || !loc.isEnabled()) {
                 return createNewLocationToken(country, user);
@@ -286,7 +286,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void addUserLocation(User user, String ip) {
+    public void addUserLocation(Usuario user, String ip) {
 
         if(!isGeoIpLibEnabled()) {
             return;
@@ -309,7 +309,7 @@ public class UserService implements IUserService {
         return Boolean.parseBoolean(env.getProperty("geo.ip.lib.enabled"));
     }
 
-    private NewLocationToken createNewLocationToken(String country, User user) {
+    private NewLocationToken createNewLocationToken(String country, Usuario user) {
         UserLocation loc = new UserLocation(country, user);
         loc = userLocationRepository.save(loc);
 

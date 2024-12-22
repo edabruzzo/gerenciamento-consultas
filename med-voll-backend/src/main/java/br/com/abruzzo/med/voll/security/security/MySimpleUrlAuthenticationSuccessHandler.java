@@ -1,6 +1,6 @@
 package br.com.abruzzo.med.voll.security.security;
 
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import br.com.abruzzo.med.voll.security.service.DeviceService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,8 +43,8 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             session.setMaxInactiveInterval(30 * 60);
 
             String username;
-            if (authentication.getPrincipal() instanceof User) {
-            	username = ((User)authentication.getPrincipal()).getEmail();
+            if (authentication.getPrincipal() instanceof Usuario) {
+            	username = ((Usuario)authentication.getPrincipal()).getEmail();
             }
             else {
             	username = authentication.getName();
@@ -59,8 +59,8 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 
     private void loginNotification(Authentication authentication, HttpServletRequest request) {
         try {
-            if (authentication.getPrincipal() instanceof User && isGeoIpLibEnabled()) {
-                deviceService.verifyDevice(((User)authentication.getPrincipal()), request);
+            if (authentication.getPrincipal() instanceof Usuario && isGeoIpLibEnabled()) {
+                deviceService.verifyDevice(((Usuario)authentication.getPrincipal()), request);
             }
         } catch (Exception e) {
             logger.error("An error occurred while verifying device or location", e);
@@ -94,8 +94,8 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
         }
         if (isUser) {
         	 String username;
-             if (authentication.getPrincipal() instanceof User) {
-             	username = ((User)authentication.getPrincipal()).getEmail();
+             if (authentication.getPrincipal() instanceof Usuario) {
+             	username = ((Usuario)authentication.getPrincipal()).getEmail();
              }
              else {
              	username = authentication.getName();

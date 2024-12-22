@@ -31,7 +31,7 @@
 	</http>
 
 	<beans:bean id="myAuthenticationSuccessHandler"
-		class="br.com.abruzzo.security.MySimpleUrlAuthenticationSuccessHandler" />
+		class="br.com.abruzzo.med.voll.security.MySimpleUrlAuthenticationSuccessHandler" />
 
 	<authentication-manager>
 		<authentication-provider user-service-ref="userDetailsService" />

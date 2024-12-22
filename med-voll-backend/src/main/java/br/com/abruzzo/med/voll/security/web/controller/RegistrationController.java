@@ -2,7 +2,7 @@ package br.com.abruzzo.med.voll.security.web.controller;
 
 import br.com.abruzzo.med.voll.security.persistence.model.Role;
 import br.com.abruzzo.med.voll.security.persistence.model.Privilege;
-import br.com.abruzzo.med.voll.security.persistence.model.User;
+import br.com.abruzzo.med.voll.security.persistence.model.Usuario;
 import br.com.abruzzo.med.voll.security.security.ISecurityUserService;
 import br.com.abruzzo.med.voll.security.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,7 +55,7 @@ public class RegistrationController {
         model.addAttribute("lang", locale.getLanguage());
         final String result = userService.validateVerificationToken(token);
         if (result.equals("valid")) {
-            final User user = userService.getUser(token);
+            final Usuario user = userService.getUser(token);
             // if (user.isUsing2FA()) {
             // model.addAttribute("qr", userService.generateQRUrl(user));
             // return "redirect:/qrcode.html?lang=" + locale.getLanguage();
@@ -157,7 +157,7 @@ public class RegistrationController {
 
     // ============== NON-API ============
 
-    public void authWithoutPassword(User user) {
+    public void authWithoutPassword(Usuario user) {
 
         List<Privilege> privileges = user.getRoles()
                 .stream()
