@@ -49,7 +49,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(securedEnabled = true)
 public class SecSecurityConfig {
 
     @Autowired
@@ -134,11 +134,11 @@ public class SecSecurityConfig {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers("/api/v1/auth**")
                         .permitAll()
-                                .requestMatchers(HttpMethod.DELETE, "/medicos/**")
+/*                                .requestMatchers(HttpMethod.DELETE, "/medicos/**")
                                 .hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/pacientes/**")
                                 .hasRole("ADMIN")
-                        .anyRequest()
+*/                       .anyRequest()
                         .authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

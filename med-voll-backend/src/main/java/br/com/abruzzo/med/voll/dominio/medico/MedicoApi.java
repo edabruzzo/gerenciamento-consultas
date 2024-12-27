@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -47,12 +48,14 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
     }
 
     @PostMapping("/cadastrar")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<Resposta<MedicoDto>> cadastrar(@RequestBody @Valid MedicoDto dadosMedico,
                                                          UriComponentsBuilder uriBuilder){
         return this.inserir(this.medicoMapper.toEntity(dadosMedico), API,uriBuilder);
     }
 
     @PutMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<Resposta> atualizar(
             @PathVariable Long id,
             @RequestBody @Valid MedicoAtualizarDto dados) {
@@ -62,6 +65,7 @@ public class MedicoApi implements CrudBaseApi<Medico, MedicoDto, Long>{
     }
 
     @DeleteMapping("{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<Resposta> remover(@PathVariable Long id){
         return this.excluir(id);
     }
