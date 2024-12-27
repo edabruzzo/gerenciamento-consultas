@@ -19,6 +19,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -46,8 +47,9 @@ import java.io.IOException;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
+//@EnableMethodSecurity(securedEnabled = true)
 public class SecSecurityConfig {
 
     @Autowired
@@ -129,8 +131,16 @@ public class SecSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth**")
-                        .permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers("/api/v1/auth**")
+                        .permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/medicos/**")
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/pacientes/**")
+                                .hasRole("ADMIN")
+                        .anyRequest()
+                        .authenticated()
+                )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authProvider())
                     .addFilterBefore(

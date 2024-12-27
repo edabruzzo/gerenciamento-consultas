@@ -64,7 +64,7 @@ public class TokenService {
     }
 
     private Date getExpiracaoDate() {
-        return new Date(System.currentTimeMillis() + 1000 * 60 * 24);
+        return new Date(System.currentTimeMillis() + EXPIRACAO_MILLISEGUNDOS * 24);
     }
 
     private Instant getExpiracao() {

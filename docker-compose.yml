@@ -40,7 +40,7 @@ services:
     ports:
       - "${PORTA_API_BACKEND}:${PORTA_API_BACKEND}"
     depends_on:
-      - med-voll-security
+      #- med-voll-security
       - med_voll_db_postgres
     entrypoint: ["sh", "/usr/local/bin/wait-for-it", "med_voll_db_postgres:5432", "--", "java", "-jar", "/opt/java/app.jar"]
     networks:
